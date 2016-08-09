@@ -24,7 +24,7 @@ mv ./*.rpm ../dist/
 cd ..
 rm -rf .stack-fpm
 
-if [ `uname -n` = "Darwin" ]; then
+if [ `uname` = "Darwin" ]; then
   echo ">>> Building darwin binaries..."
   stack build
   rm -rf .stack-fpm
