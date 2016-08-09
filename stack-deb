@@ -1,0 +1,8 @@
+#!/bin/bash -e
+stack build --docker
+rm -rf dist
+mkdir dist
+cp `stack path --docker --dist-dir`/build/stack-bump/stack-bump ./dist/
+version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
+cd dist
+fpm -t deb -s dir --deb-pre-depends libgmp-dev -n stack-bump -v $version
