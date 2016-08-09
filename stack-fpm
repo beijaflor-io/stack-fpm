@@ -10,7 +10,7 @@ fpm -t deb -s tar --deb-pre-depends libgmp-dev -n stack-bump -v $version ./.stac
 fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n stack-bump -v $version ./.stack-fpm.tar.gz
 fpm -t osxpkg -s tar -n stack-bump -v $version ./.stack-fpm.tar.gz
 mkdir -p ../dist
-mv ./.stacm-fpm/*.deb ../dist/
+mv ./.stack-fpm/*.deb ../dist/
 mv ./.stack-fpm/*.rpm ../dist/
 mv ./.stack-fpm/*.pkg ../dist/
 rm -rf .stack-fpm
