@@ -36,7 +36,7 @@ if [ `uname` = "Darwin" ]; then
   tar -zcvf .stack-fpm.tar.gz *
   fpm -t osxpkg -s tar -n $name -v $version ./.stack-fpm.tar.gz
   mkdir -p ../dist
-  mv ./.*.pkg ../dist/
+  mv ./*.pkg ../dist/
 fi
 
 cd ..
