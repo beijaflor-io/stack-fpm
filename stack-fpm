@@ -30,10 +30,10 @@ if [ `uname` = "Darwin" ]; then
   rm -rf .stack-fpm
   mkdir -p .stack-fpm/usr/local/bin/
   cp `stack path --dist-dir`/build/$name/$name ./.stack-fpm/usr/local/bin/
-  echo ">>> Building darwin packages..."
-  cd .stack-fpm
-  tar -zcvf .stack-fpm.tar.gz *
   version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
+  cd .stack-fpm
+  echo ">>> Building darwin packages..."
+  tar -zcvf .stack-fpm.tar.gz *
   fpm -t osxpkg -s tar -n $name -v $version ./.stack-fpm.tar.gz
   mkdir -p ../dist
   mv ./.*.pkg ../dist/
