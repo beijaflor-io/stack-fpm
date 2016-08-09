@@ -19,8 +19,9 @@ tar -zcvf .stack-fpm.tar.gz *
 fpm -t deb -s tar --deb-pre-depends libgmp-dev -n $name -v $version ./.stack-fpm.tar.gz
 fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n $name -v $version ./.stack-fpm.tar.gz
 mkdir -p ../dist
-mv ./.stack-fpm/*.deb ../dist/
-mv ./.stack-fpm/*.rpm ../dist/
+mv ./*.deb ../dist/
+mv ./*.rpm ../dist/
+cd ..
 rm -rf .stack-fpm
 
 if [[ `uname -n` = "Darwin" ]]; then
@@ -35,6 +36,8 @@ if [[ `uname -n` = "Darwin" ]]; then
   version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
   fpm -t osxpkg -s tar -n $name -v $version ./.stack-fpm.tar.gz
   mkdir -p ../dist
-  mv ./.stack-fpm/*.pkg ../dist/
+  mv ./.*.pkg ../dist/
 fi
+
+cd ..
 rm -rf .stack-fpm
