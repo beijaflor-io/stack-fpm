@@ -1,7 +1,7 @@
 #!/bin/bash -e
 name=$1
 
-if [ $name = "" ]; then
+if [[ $name = "" ]]; then
   echo "Name not specified, using `basename $(pwd)`"
   name=`basename $(pwd)`
 fi
@@ -23,7 +23,7 @@ mv ./.stack-fpm/*.deb ../dist/
 mv ./.stack-fpm/*.rpm ../dist/
 rm -rf .stack-fpm
 
-if [ `uname -n` = "Darwin" ]; then
+if [[ `uname -n` = "Darwin" ]]; then
   echo ">>> Building darwin binaries..."
   stack build
   rm -rf .stack-fpm
