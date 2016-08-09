@@ -1,6 +1,6 @@
 install:
-	cp ./stack-deb /usr/local/bin/stack-deb
-	chmod +x /usr/local/bin/stack-deb
+	cp ./stack-fpm /usr/local/bin/stack-fpm
+	chmod +x /usr/local/bin/stack-fpm
 
 uninstall:
-	rm /usr/local/bin/stack-deb
+	rm /usr/local/bin/stack-fpm

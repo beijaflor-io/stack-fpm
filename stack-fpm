@@ -1,0 +1,14 @@
+#!/bin/bash -e
+stack build --docker
+rm -rf .stack-fpm
+mkdir -p .stack-fpm/usr/local/bin/
+cp `stack path --docker --dist-dir`/build/stack-bump/stack-bump ./.stack-fpm/usr/local/bin/
+version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
+cd .stack-fpm
+tar -zcvf .stack-fpm.tar.gz *
+fpm -t deb -s tar --deb-pre-depends libgmp-dev -n stack-bump -v $version ./.stack-fpm.tar.gz
+fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n stack-bump -v $version ./.stack-fpm.tar.gz
+mkdir -p ../dist
+mv ./.stacm-fpm/*.deb ../dist/
+mv ./.stack-fpm/*.rpm ../dist/
+rm -rf .stack-fpm
