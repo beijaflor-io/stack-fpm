@@ -6,15 +6,15 @@ if [[ $name = "" ]]; then
   name=`basename $(pwd)`
 fi
 
-echo ">>> Building linux binaries..."
+echo ">>> Building for Linux..."
 stack docker pull
 stack build --docker
 rm -rf .stack-fpm
-mkdir -p .stack-fpm/usr/local/bin/
-cp `stack path --docker --dist-dir`/build/$name/$name ./.stack-fpm/usr/local/bin/
+mkdir -p .stack-fpm/usr/local
+cp -r `stack path --docker --local-install-root` ./.stack-fpm/usr/local/
 version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
 cd .stack-fpm
-echo ">>> Building linux packages..."
+echo ">>> Building Linux packages..."
 tar -zcvf .stack-fpm.tar.gz *
 fpm -t deb -s tar --deb-pre-depends libgmp-dev -n $name -v $version ./.stack-fpm.tar.gz
 fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n $name -v $version ./.stack-fpm.tar.gz
@@ -25,14 +25,14 @@ cd ..
 rm -rf .stack-fpm
 
 if [ `uname` = "Darwin" ]; then
-  echo ">>> Building darwin binaries..."
+  echo ">>> Building Darwin..."
   stack build
   rm -rf .stack-fpm
-  mkdir -p .stack-fpm/usr/local/bin/
-  cp `stack path --dist-dir`/build/$name/$name ./.stack-fpm/usr/local/bin/
+  mkdir -p .stack-fpm/usr/local
+  cp -r `stack path --local-install-root` ./.stack-fpm/usr/local/
   version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
   cd .stack-fpm
-  echo ">>> Building darwin packages..."
+  echo ">>> Building Darwin packages..."
   tar -zcvf .stack-fpm.tar.gz *
   fpm -t osxpkg -s tar -n $name -v $version ./.stack-fpm.tar.gz
   mkdir -p ../dist
