@@ -1,0 +1,20 @@
+name: stack-fpm
+version: '0.1.0.0'
+category: Distribution
+author: Pedro Tacla Yamada
+maintainer: tacla.yamada@gmail.com
+license: MIT
+homepage: https://gitlab.com/yamadapc/stack-fpm
+
+extra-source-files:
+- ChangeLog.md
+
+dependencies:
+- base >=4.8 && <4.9
+- protolude
+- optparse-applicative
+
+executables:
+  stack-fpm:
+    main: Main.hs
+    source-dirs: src
