@@ -7,4 +7,4 @@ on converting the shell script onto a Haskell script for doing a more principled
 implementation.
 
 ## License
-GPLv3
+AGPLv3
