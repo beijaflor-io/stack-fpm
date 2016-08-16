@@ -18,9 +18,11 @@ echo ">>> Building Linux packages..."
 tar -zcvf stack-fpm.tar.gz *
 fpm -t deb -s tar --deb-pre-depends libgmp-dev -n $name -v $version ./stack-fpm.tar.gz
 fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n $name -v $version ./stack-fpm.tar.gz
+fpm -t apk -s tar -n $name -v $version ./stack-fpm.tar.gz
 mkdir -p ../../dist
 mv ./*.deb ../../dist/
 mv ./*.rpm ../../dist/
+mv ./*.apk ../../dist/
 cd ../..
 
 if [ `uname` = "Darwin" ]; then
