@@ -24,4 +24,6 @@ executable stack-fpm
       base >=4.8 && <4.9
     , protolude
     , optparse-applicative
+    , turtle
+    , projectroot
   default-language: Haskell2010

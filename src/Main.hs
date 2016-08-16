@@ -3,9 +3,19 @@ module Main where
 
 import           Protolude
 import           Options.Applicative
-
-data StackFpmOptions = StackFpmOptions { stackFpmName :: Text
-                                       }
+import           System.Directory.ProjectRoot
 
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = execParser opts >>= runWithOptions
+  where
+    parser = StackFpmOptions <$> strOption
+                               ( long "name"
+                              <> metavar "NAME"
+                              <> help "The name of the package to build" )
+                             <*> switch
+                               ( long "verbose"
+                              <> help "Be verbose" )
+
+data StackFpmOptions = StackFpmOptions { stackFpmName    :: Text
+                                       , stackFpmVerbose :: Bool
+                                       }

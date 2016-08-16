@@ -14,6 +14,7 @@ dependencies:
 - protolude
 - optparse-applicative
 - turtle
+- projectroot
 
 executables:
   stack-fpm:
