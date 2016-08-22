@@ -2,8 +2,8 @@
 name=$1
 
 if [[ $name = "" ]]; then
-  echo "Name not specified, using `basename $(pwd)`"
-  name=`basename $(pwd)`
+  echo "Name not specified, using $(basename "$(pwd)")"
+  name="$(basename "$(pwd)")"
 fi
 
 echo ">>> Building for Linux..."
@@ -11,31 +11,33 @@ stack docker pull
 stack build --docker
 rm -rf .stack-fpm/linux
 mkdir -p .stack-fpm/linux/usr/local
-cp -r `stack path --docker --local-install-root`/* ./.stack-fpm/linux/usr/local/
-version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
+cp -r "$(stack path --docker --local-install-root)"/* ./.stack-fpm/linux/usr/local/
+version=$(ggrep -Po "version: '(\K[^']*)" < ./package.yaml)
 cd .stack-fpm/linux
 echo ">>> Building Linux packages..."
-tar -zcvf stack-fpm.tar.gz *
-fpm -t deb -s tar --deb-pre-depends libgmp-dev -n $name -v $version ./stack-fpm.tar.gz
-fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n $name -v $version ./stack-fpm.tar.gz
-fpm -t apk -s tar -n $name -v $version ./stack-fpm.tar.gz
+tar -zcvf stack-fpm.tar.gz ./*
+fpm -t deb -s tar --deb-pre-depends libgmp-dev -n "$name" -v "$version" ./stack-fpm.tar.gz
+fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n "$name" -v "$version" ./stack-fpm.tar.gz
+fpm -t apk -s tar -n "$name" -v "$version" ./stack-fpm.tar.gz
 mkdir -p ../../dist
 mv ./*.deb ../../dist/
 mv ./*.rpm ../../dist/
 mv ./*.apk ../../dist/
+mv ./stack-fpm.tar.gz ../../dist/"$name-$version-linux_amd64.tar.gz"
 cd ../..
 
-if [ `uname` = "Darwin" ]; then
+if [ "$(uname)" = "Darwin" ]; then
   echo ">>> Building Darwin..."
   stack build
   rm -rf .stack-fpm/darwin
   mkdir -p .stack-fpm/darwin/usr/local
-  cp -r `stack path --local-install-root`/* ./.stack-fpm/darwin/usr/local/
-  version=`cat package.yaml | ggrep -Po "version: '(\K[^']*)"`
+  cp -r "$(stack path --local-install-root)"/* ./.stack-fpm/darwin/usr/local/
+  version=$(ggrep -Po "version: '(\K[^']*)" < ./package.yaml)
   cd .stack-fpm/darwin
   echo ">>> Building Darwin packages..."
-  tar -zcvf .stack-fpm.tar.gz *
-  fpm -t osxpkg -s tar -n $name -v $version ./.stack-fpm.tar.gz
+  tar -zcvf .stack-fpm.tar.gz ./*
+  fpm -t osxpkg -s tar -n "$name" -v "$version" ./.stack-fpm.tar.gz
   mkdir -p ../../dist
   mv ./*.pkg ../../dist/
+  mv ./stack-fpm.tar.gz ../../dist/"$name-$version-darwin.tar.gz"
 fi
