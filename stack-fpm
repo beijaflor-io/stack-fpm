@@ -35,8 +35,8 @@ if [ "$(uname)" = "Darwin" ]; then
   version=$(ggrep -Po "version: '(\K[^']*)" < ./package.yaml)
   cd .stack-fpm/darwin
   echo ">>> Building Darwin packages..."
-  tar -zcvf .stack-fpm.tar.gz ./*
-  fpm -t osxpkg -s tar -n "$name" -v "$version" ./.stack-fpm.tar.gz
+  tar -zcvf stack-fpm.tar.gz ./*
+  fpm -t osxpkg -s tar -n "$name" -v "$version" ./stack-fpm.tar.gz
   mkdir -p ../../dist
   mv ./*.pkg ../../dist/
   mv ./stack-fpm.tar.gz ../../dist/"$name-$version-darwin.tar.gz"
