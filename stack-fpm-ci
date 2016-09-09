@@ -1,25 +1,28 @@
-name=$1
+#!/bin/sh
+echo ">>> Name: $name"
+echo ">>> Version: $version"
+root=$(find .stack-work | grep bin$ | head -n 1 | xargs dirname)
+echo ">>> Copying files from $root..."
 
-if [[ $name = "" ]]; then
-  echo "Name not specified, using $(basename "$(pwd)")"
-  name="$(basename "$(pwd)")"
-fi
-
-echo ">>> Building for Linux..."
-stack build
-rm -rf .stack-fpm/linux
+rm -rf .stack-fpm
 mkdir -p .stack-fpm/linux/usr/local
-cp -r "$(stack path --local-install-root)"/* ./.stack-fpm/linux/usr/local/
-version=$(ggrep -Po "version: '(\K[^']*)" < ./package.yaml)
+cp -r $root/* ./.stack-fpm/linux/usr/local/
 cd .stack-fpm/linux
+
 echo ">>> Building Linux packages..."
 tar -zcvf stack-fpm.tar.gz ./*
+echo ">>> Building Linux packages... [debian]"
 fpm -t deb -s tar --deb-pre-depends libgmp-dev -n "$name" -v "$version" ./stack-fpm.tar.gz
+echo ">>> Building Linux packages... [rpm]"
 fpm -t rpm -s tar --rpm-os linux --rpm-autoreq -n "$name" -v "$version" ./stack-fpm.tar.gz
+echo ">>> Building Linux packages... [apk]"
 fpm -t apk -s tar -n "$name" -v "$version" ./stack-fpm.tar.gz
+
+echo ">>> Moving packages to dist..."
 mkdir -p ../../dist
 mv ./*.deb ../../dist/
 mv ./*.rpm ../../dist/
 mv ./*.apk ../../dist/
 mv ./stack-fpm.tar.gz ../../dist/"$name-$version-linux_amd64.tar.gz"
+
 cd ../..
