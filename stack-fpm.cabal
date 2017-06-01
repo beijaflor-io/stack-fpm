@@ -24,7 +24,11 @@ executable stack-fpm
       base >=4.8 && <4.9
     , protolude
     , optparse-applicative
+    , directory
+    , filepath
     , turtle
+    , Cabal
+    , yaml
     , projectroot
   default-language: Haskell2010
 
@@ -37,10 +41,15 @@ test-suite hspec
       base >=4.8 && <4.9
     , protolude
     , optparse-applicative
+    , directory
+    , filepath
     , turtle
+    , Cabal
+    , yaml
     , projectroot
     , hspec
     , QuickCheck
+    , language-dockerfile >=0.3.4
   other-modules:
       SanitySpec
   default-language: Haskell2010

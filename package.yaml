@@ -11,7 +11,11 @@ dependencies:
 - base >=4.8 && <4.9
 - protolude
 - optparse-applicative
+- directory
+- filepath
 - turtle
+- Cabal
+- yaml
 - projectroot
 executables:
   stack-fpm:
@@ -22,5 +26,6 @@ tests:
     dependencies:
     - hspec
     - QuickCheck
+    - language-dockerfile >=0.3.4
     main: Spec.hs
     source-dirs: test
